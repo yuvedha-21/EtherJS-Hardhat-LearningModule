@@ -7,5 +7,45 @@
 //this would add some of the files to our system like - package.json which tells us about the dependencies we are using in this current project
 // node modules folder will have all the packages that are being installed in our project
 
-async function main() {}
-main;
+const ethers = require("ethers");
+//yarn add ethers <== to add ethers packes to node-modules
+
+const fs = require("fs-extra");
+//to deploy the contract we need binary and abi of our contract , and we have them as a file...inorder to interact with them we need a package called fs-extra
+
+require("dotenv").config();
+
+async function main() {
+  const provider = new ethers.providers.JsonRpcProvider(
+    "http://172.22.16.1:7545"
+  );
+
+  //this let us know to which block network we are connecting to
+  //never hardcode accout details like private key instead use .env file to integrate which should be listed in gitignore
+  const wallet = new ethers.Wallet(
+    "b2e77a6ab3a611faed9aac86a65f71fc55380c1bae4b0bf494a078e42e46e397",
+    provider
+  );
+
+  // this is a private of a particular address to which we are interacting
+
+  const abi = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.abi", "utf8");
+  const binary = fs.readFileSync(
+    "./SimpleStorage_sol_SimpleStorage.bin",
+    "utf8"
+  );
+
+  //in ethers contractFactory is an object used to deploy a contract
+  const contractFactory = new ethers.ContractFactory(abi, binary, wallet); //passing the details as arguments
+  console.log("deploying contract....");
+  const contract = await ethers.ContractFactory.deploy();
+  console.log(contract);
+  //await tells==> hey stop untill the deploy function completes the process then continue to next line
+}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
