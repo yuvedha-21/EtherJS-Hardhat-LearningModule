@@ -16,14 +16,12 @@ const fs = require("fs-extra");
 require("dotenv").config();
 
 async function main() {
-  const provider = new ethers.providers.JsonRpcProvider(
-    "http://172.22.16.1:7545"
-  );
+  const provider = new ethers.providers.JsonRpcProvider("http://0.0.0.0:7545");
 
   //this let us know to which block network we are connecting to
   //never hardcode accout details like private key instead use .env file to integrate which should be listed in gitignore
   const wallet = new ethers.Wallet(
-    "b2e77a6ab3a611faed9aac86a65f71fc55380c1bae4b0bf494a078e42e46e397",
+    "b7f7b678391d55d5fa61619a72798ae8d96ccc80358202f586b9f5be845bf7e0",
     provider
   );
 
@@ -38,7 +36,7 @@ async function main() {
   //in ethers contractFactory is an object used to deploy a contract
   const contractFactory = new ethers.ContractFactory(abi, binary, wallet); //passing the details as arguments
   console.log("deploying contract....");
-  const contract = await ethers.ContractFactory.deploy();
+  const contract = await ethers.contractFactory.deploy();
   console.log(contract);
   //await tells==> hey stop untill the deploy function completes the process then continue to next line
 }
