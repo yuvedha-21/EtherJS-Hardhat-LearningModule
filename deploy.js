@@ -12,20 +12,14 @@ const ethers = require("ethers");
 
 const fs = require("fs-extra");
 //to deploy the contract we need binary and abi of our contract , and we have them as a file...inorder to interact with them we need a package called fs-extra
-
 require("dotenv").config();
 
 async function main() {
-  const provider = new ethers.providers.JsonRpcProvider(
-    "http://172.25.176.1:7545"
-  );
+  const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
 
   //this let us know to which block network we are connecting to
   //never hardcode accout details like private key instead use .env file to integrate which should be listed in gitignore
-  const wallet = new ethers.Wallet(
-    "e423ef626b864a5a5a1fc4e231972ae5204466b07dfe63224467ec64aea620e6",
-    provider
-  );
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
   // this is a private of a particular address to which we are interacting
 
