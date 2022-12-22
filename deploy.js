@@ -16,12 +16,14 @@ const fs = require("fs-extra");
 require("dotenv").config();
 
 async function main() {
-  const provider = new ethers.providers.JsonRpcProvider("http://0.0.0.0:7545");
+  const provider = new ethers.providers.JsonRpcProvider(
+    "http://172.25.176.1:7545"
+  );
 
   //this let us know to which block network we are connecting to
   //never hardcode accout details like private key instead use .env file to integrate which should be listed in gitignore
   const wallet = new ethers.Wallet(
-    "b7f7b678391d55d5fa61619a72798ae8d96ccc80358202f586b9f5be845bf7e0",
+    "e423ef626b864a5a5a1fc4e231972ae5204466b07dfe63224467ec64aea620e6",
     provider
   );
 
@@ -32,13 +34,76 @@ async function main() {
     "./SimpleStorage_sol_SimpleStorage.bin",
     "utf8"
   );
+  const contractFactory = new ethers.ContractFactory(abi, binary, wallet);
+  console.log("Deploying, please wait...");
+  const contract = await contractFactory.deploy();
 
-  //in ethers contractFactory is an object used to deploy a contract
-  const contractFactory = new ethers.ContractFactory(abi, binary, wallet); //passing the details as arguments
-  console.log("deploying contract....");
-  const contract = await ethers.contractFactory.deploy();
-  console.log(contract);
+  const deploymentReceipt = await contract.deployTransaction.wait(1);
+  // //waiting for one block confirmation that teh contract deployment or transaction is valid
+
+  // console.log(deploymentReceipt);
   //await tells==> hey stop untill the deploy function completes the process then continue to next line
+
+  /*
+  if dont use await keyword :
+
+  Deploying, please wait...
+  Promise { <pending> }
+  
+  if we didn't ask them to wait they continue to run without letting the contract to deploy, that leads to incomplete deployment and pending promise
+
+  */
+
+  const nonce = await wallet.getTransactionCount();
+  //wallet is our account currently we're using for transactions and contract deployment
+  /* In real time we need to access the smartcontract funx just like we did in remix in that case we cannot hardcode the data like tx={}
+
+so we fetch the methods of smartcontact we deployed
+
+*/
+  // const tx = {
+  //   nonce: nonce, //every time we cannot hardcode the nonce details in a live projects
+  //   gasPrice: 100000000000,
+  //   gasLimit: 1000000,
+  //   to: null,
+  //   value: 0,
+  //   data: "copy paste from SimpleStorage Binary",
+  //   chainId: 1337,
+  // };
+  /*
+  signing a transaction - this does not create a block as we are not sending the transaction,we are jjust signing a transaction
+
+  ```
+  let resp = await wallet.signTransaction(tx);
+  console.log(resp);
+  
+  ```
+
+  gives the output as a whole binary nums
+  signing a transaction
+
+  ------------------------------
+
+  this is to send transaction with 0 value(eth) as mentioned in tx{} 
+  
+
+  const sentTxResponse = await wallet.sendTransaction(tx);
+  console.log(sentTxResponse);
+  
+  */
+  let currentFavoriteNumber = await contract.retrieve();
+  console.log(`Current Favorite Number: ${currentFavoriteNumber}`);
+  console.log("Updating favorite number...");
+  let transactionResponse = await contract.store(7);
+  let transactionReceipt = await transactionResponse.wait();
+  currentFavoriteNumber = await contract.retrieve();
+  console.log(`New Favorite Number: ${currentFavoriteNumber}`);
+  /* 
+
+  console.log(currentFavoriteNumber);
+BigNumber { _hex: '0x00', _isBigNumber: true }
+  
+  */
 }
 
 main()
