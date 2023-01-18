@@ -1,6 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomiclabs/hardhat-etherscan");
 require("dotenv").config();
+require("./tasks/blockNumber");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 RPC_URL = process.env.RPC_URL;
