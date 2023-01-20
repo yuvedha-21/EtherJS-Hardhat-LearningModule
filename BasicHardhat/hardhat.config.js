@@ -15,10 +15,10 @@ module.exports = {
       chainId: 5,
     },
   },
-  etherscan: {
-    //https://api-goerli.etherscan.io/
-    //H9WZ8W46J7DF5YFWBY6UDFCMBAMHWJBX69
-    apiKey: ETHERSCAN_API_KEY,
-  },
+  // etherscan: {
+  //   https://api-goerli.etherscan.io/
+  //   H9WZ8W46J7DF5YFWBY6UDFCMBAMHWJBX69
+  //   apiKey: ETHERSCAN_API_KEY,
+  // },
   solidity: "0.8.17",
 };

@@ -1,9 +1,11 @@
+const { log } = require("async");
 const { ethers } = require("hardhat");
 async function main() {
   const SimpleStorageFactory = await ethers.getContractFactory("SimpleStorage");
   console.log("deploying contract.............");
   const simp = await SimpleStorageFactory.deploy();
   await simp.deployed();
+  console.log(`deployed at ${simp.address}`);
   console.log(network.config);
   if (network.config.chainId === 5 && process.env.ETHERSCAN_API_KEY) {
     await simp.deployTransaction.wait(6);
