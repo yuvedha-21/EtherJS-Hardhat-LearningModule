@@ -1,0 +1,8 @@
+{
+  "name": "EtherJS-Hardhat-LearningModule",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/yuvedha-21/EtherJS-Hardhat-LearningModule.git",
+  "author": "Yuvedha-21 <yuvedha21@gmail.com>",
+  "license": "MIT"
+}
