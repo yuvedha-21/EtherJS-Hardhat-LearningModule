@@ -16,13 +16,13 @@ module.exports = {
       chainId: 5,
     },
   },
-  namesAccounts: {
+  namedAccounts: {
     deployer: {
       default: 0,
       5: 1,
     },
     user: {
-      default: 0,
+      default: 1,
     },
   },
   // etherscan: {
